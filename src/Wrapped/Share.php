@@ -357,7 +357,20 @@ class Share extends AbstractShare {
 	 * @throws \Icewind\SMB\Exception\DependencyException
 	 */
 	public function append($target) {
-		throw new DependencyException('php-libsmbclient is required for append');
+		$target = $this->escapePath($target);
+		// since returned stream is closed by the caller we need to create a new instance
+		// since we can't re-use the same file descriptor over multiple calls
+		$connection = $this->getConnection();
+
+		$fh = $connection->getFileInputStream();
+		$connection->write('reput ' . $this->system->getFD(4) . ' ' . $target);
+		$connection->write('exit');
+
+		// use a close callback to ensure the upload is finished before continuing
+		// this also serves as a way to keep the connection in scope
+		return CallbackWrapper::wrap($fh, null, null, function () use ($connection, $target) {
+			$connection->close(false); // dont terminate, give the upload some time
+		});
 	}
 
 	/**
