@@ -86,7 +86,7 @@ class Parser {
 
 		if (substr($output[0], 0, strlen(self::MSG_NOT_FOUND)) === self::MSG_NOT_FOUND) {
 			$localPath = substr($output[0], strlen(self::MSG_NOT_FOUND));
-			throw new InvalidResourceException('Failed opening local file "' . $localPath . '" for writing');
+			throw new InvalidResourceException('Failed opening local file "' . $localPath . '"');
 		}
 
 		throw Exception::fromMap(self::EXCEPTION_MAP, $error, $path);

@@ -57,6 +57,7 @@ class Connection extends RawConnection {
 			throw new ConnectionRefusedException();
 		}
 		$this->readTillPrompt();
+		$this->flush();
 	}
 
 	/**

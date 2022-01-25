@@ -110,6 +110,13 @@ class RawConnection {
 		return $result;
 	}
 
+	public function flush() {
+		$meta = stream_get_meta_data($this->getOutputStream());
+		stream_set_blocking($this->getOutputStream(), false);
+		stream_get_contents($this->getOutputStream());
+		stream_set_blocking($this->getOutputStream(), $meta["blocked"]);
+	}
+
 	/**
 	 * read output till the next prompt
 	 *

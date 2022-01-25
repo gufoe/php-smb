@@ -454,6 +454,7 @@ class Share extends AbstractShare {
 	 * @return string[]
 	 */
 	protected function execute(string $command): array {
+		$this->connect()->flush();
 		$this->connect()->write($command);
 		return $this->connect()->read();
 	}
