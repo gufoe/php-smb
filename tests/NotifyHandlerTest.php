@@ -72,7 +72,9 @@ class NotifyHandlerTest extends TestCase {
 			usleep(1000 * 100);// give it some time to start listening
 
 			$share->put(__FILE__, 'source.txt');
+			usleep(1000 * 10);
 			$share->rename('source.txt', 'target.txt');
+			usleep(1000 * 10);
 			$share->del('target.txt');
 			usleep(1000 * 100);// give it some time
 
@@ -89,7 +91,7 @@ class NotifyHandlerTest extends TestCase {
 			$process->stop();
 
 			$changes = $this->filterModifiedChanges($changes);
-			$this->assertCount(4, $changes);
+			$this->assertCount(4, $changes, "Expected 4 changes got: " . print_r($changes, true));
 			if ($changes[1]->getCode() === INotifyHandler::NOTIFY_REMOVED) {
 				// sometimes during testing, the move isn't properly recognized with older smb versions, retry a few times
 				usleep(1000 * 100);
